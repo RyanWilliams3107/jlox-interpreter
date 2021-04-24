@@ -49,14 +49,23 @@ public class jlox {
         Scanner sc = new Scanner(src);
         List<Token> tokens = sc.scanTokens();
 
-        for (Token tok : tokens)
-        {
-            System.out.println(tok);
-        }
+        Parser parser =  new Parser(tokens);
+        Expression expression = parser.parse();
+        if(hadError) return;
+        System.out.println(new ASTPrinter().print(expression));
     }
 
     public static void error(int ln, String msg){
         report(ln, "", msg);
+    }
+    
+    public static void error(Token tok, String msg) {
+    	if(tok.GetType() == TokenType.EOF) {
+    		report(tok.GetLine(), " at end", msg);
+    	}
+    	else {
+    		report(tok.GetLine(), " at '" + tok.GetLexeme() + "'", msg);
+    	}
     }
 
     private static void report(int ln, String loc, String msg){

@@ -36,6 +36,7 @@ public class Scanner {
         keywords.put("while",  TokenType.WHILE);
     }
 
+    
     public Scanner(String src) {
         this.source = src;
     }
@@ -56,8 +57,8 @@ public class Scanner {
     }
 
     private void addToken(TokenType type) {
-        addToken(type, null);
-      }
+    	addToken(type, null);
+    }
     
     private void addToken(TokenType type, Object literal) {
         String text = source.substring(start, current);
@@ -76,6 +77,7 @@ public class Scanner {
             case '-': addToken(TokenType.MINUS); break;
             case '+': addToken(TokenType.PLUS); break;
             case '*': addToken(TokenType.STAR); break;
+            case '%': addToken(TokenType.MOD); break;
             case ';': addToken(TokenType.SEMICOLON); break;
             case '!':
                 addToken(match('=') ? TokenType.NOTEQUAL : TokenType.NOT);

@@ -22,7 +22,7 @@ public class Parser {
 		while(!end()) {
 			if(previous().GetType() == TokenType.SEMICOLON) {
 				return;
-			}
+		}
 			
 			switch(peek().GetType()) {
 				case CLASS:
@@ -91,7 +91,7 @@ public class Parser {
 	private Expression factor() {
 		Expression exp  = unary();
 		
-		while (match(TokenType.SLASH, TokenType.STAR)) {
+		while (match(TokenType.MOD, TokenType.SLASH, TokenType.STAR)) {
 			Token op = previous();
 			Expression right = unary();
 			exp = new Expression.Binary(exp, op, right);

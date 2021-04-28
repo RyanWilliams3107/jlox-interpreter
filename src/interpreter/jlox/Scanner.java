@@ -80,7 +80,7 @@ public class Scanner {
             case '%': addToken(TokenType.MOD); break;
             case ';': addToken(TokenType.SEMICOLON); break;
             case '!':
-                addToken(match('=') ? TokenType.NOTEQUAL : TokenType.NOT);
+                addToken(match('=') ? TokenType.NOT_EQUAL : TokenType.NOT);
                 break;
             case '=':
                 addToken(match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL);

@@ -57,7 +57,7 @@ public class Parser {
 	private Expression equality() {
 		Expression exp = comparison();
 		
-		while (match(TokenType.NOTEQUAL, TokenType.EQUAL_EQUAL)) {
+		while (match(TokenType.NOT_EQUAL, TokenType.EQUAL_EQUAL)) {
 			Token op = previous();
 			Expression right = comparison();
 			exp = new Expression.Binary(exp, op, right);

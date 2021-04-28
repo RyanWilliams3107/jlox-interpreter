@@ -7,6 +7,31 @@ import interpreter.jlox.Expression.Unary;
 
 public class Interpreter implements Expression.Visitor<Object> {
 
+	
+	void interpret(Expression exp) {
+		try
+		{
+			Object value = evaluate(exp);
+			System.out.println(stringify(value));
+		}
+		catch(RuntimeError e) {
+			jlox.runtimeError(e);
+		}
+	}
+	
+	private String stringify(Object value) {
+		if (value == null) return "nil";
+
+	    if (value instanceof Double) {
+	      String text = value.toString();
+	      if (text.endsWith(".0")) {
+	    	  text = text.substring(0, text.length() - 2);
+	      }
+	      return text;
+		}
+	    return value.toString();
+	}
+
 	@Override
 	public Object visitBinaryExpression(Binary expression) {
 		Object lhs = evaluate(expression.left);
@@ -36,24 +61,24 @@ public class Interpreter implements Expression.Visitor<Object> {
 			if(lhs instanceof String && rhs instanceof String) {
 				return (String) lhs + (String) rhs;
 			}
-			break;
+			
+			throw new RuntimeError(expression.operator, "Operands must be two numbers or two strings");
+			
 		case SLASH:
 			checkNumberOperands(expression.operator, lhs, rhs);
 			if ((double)rhs == 0) {
-				jlox.error(expression.operator.GetLine(), "Division by 0 error");
-				return null;
+				throw new RuntimeError(expression.operator, "Division by 0 error");
 			}
 			return (double) lhs / (double) rhs;
 		case MOD:
 			checkNumberOperands(expression.operator, lhs, rhs);
 			if ((double)rhs == 0) {
-				jlox.error(expression.operator.GetLine(), "Division by 0 error");
-				return null;
+				throw new RuntimeError(expression.operator, "Mod by 0 error");
 			}
 			return (double) lhs % (double) rhs;
 		case STAR:
 			return (double) lhs * (double) rhs;
-		case NOT:
+		case NOT_EQUAL:
 			return !equal(lhs, rhs);
 		case EQUAL_EQUAL:
 			return equal(lhs, rhs);
@@ -66,7 +91,10 @@ public class Interpreter implements Expression.Visitor<Object> {
 	}
 
 	private void checkNumberOperands(Token operator, Object lhs, Object rhs) {
-		// TODO Auto-generated method stub
+		if (lhs instanceof Double && rhs instanceof Double) {
+			return;
+		}
+		throw new RuntimeError(operator, "Operands must be numbers");
 		
 	}
 
